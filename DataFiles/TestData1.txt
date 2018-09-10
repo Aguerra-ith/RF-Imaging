@@ -13,3 +13,4 @@ ${juanDOB}        1932-04-09
 @{juanDobList}    1900    1930    1932    'Apr'    9
 @{noStudyDate}    3000    3000    3000    'Dec'    12
 ${noSearchResults}    No Search Results
+${DeviceManagerURL}    https://idprovider.intouchstaging.com/connect/authorize?client_id=DevicesStg&scope=openid%20profile%20DeviceManager%20&response_type=code&redirect_uri=https://devices-stg.intouchstaging.com/auth/callback

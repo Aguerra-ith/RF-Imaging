@@ -16,7 +16,7 @@ Redirect users to the requested URL after they sign in
     IDP Login    ${superUsername}    ${superPassword}
     Location Should Contain    &search%5Bgeolocation%5D=4513&search%5Bpatient_first_name%5D=juan&search%5Bpatient_last_name%5D=&search%5Bpatient_dob%5D=&search%5Bpatient_id%5D=&search%5Bfrom_date%5D=&search%5Bto_date%5D=&commit=Search
     Logout from IMG
-    Go To    ${SmartNotesURL}
+    Go To    ${DeviceManagerURL}
     IDP Login    ${superUsername}    ${superPassword}
     Go To    https://imaging-stg.intouchstaging.com/studies?utf8=%E2%9C%93&search%5Bgeolocation%5D=4513&search%5Bpatient_first_name%5D=juan&search%5Bpatient_last_name%5D=&search%5Bpatient_dob%5D=&search%5Bpatient_id%5D=&search%5Bfrom_date%5D=&search%5Bto_date%5D=&commit=Search
     Location should contain    &search%5Bgeolocation%5D=4513&search%5Bpatient_first_name%5D=juan&search%5Bpatient_last_name%5D=&search%5Bpatient_dob%5D=&search%5Bpatient_id%5D=&search%5Bfrom_date%5D=&search%5Bto_date%5D=&commit=Search
