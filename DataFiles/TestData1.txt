@@ -1,0 +1,15 @@
+*** Variables ***
+${superUsername}    aguerra
+${superPassword}    Welcome1!
+${ImagingURL}     https://imaging-stg.intouchstaging.com
+${idpBasePath}    https://idprovider.intouchstaging.com
+${SmartNotesURL}    https://notes-stg.intouchstaging.com
+${juanFirstName}    Juan
+${juanLastName}    Perez
+${juanStudyDate}    2007-06-25
+${juanMRN}        HumanSample0009
+${juanDOB}        1932-04-09
+@{studyDate}      2000    2000    2007    'Jun'    25
+@{juanDobList}    1900    1930    1932    'Apr'    9
+@{noStudyDate}    3000    3000    3000    'Dec'    12
+${noSearchResults}    No Search Results

@@ -1,0 +1,102 @@
+*** Settings ***
+Suite Teardown
+Library           ExtendedSelenium2Library
+Resource          Keywords/GeneralKeywords.txt
+Resource          Keywords/imgPageKeywords.txt
+
+*** Test Cases ***
+As a physician user I want to be able to log in with username and password
+    Open chrome and Maximize    ${ImagingURL}
+    IDP Login    ${superUsername}    ${superPassword}
+    Logout from IMG
+    Close Browser
+
+Redirect users to the requested URL after they sign in
+    Open chrome and Maximize    https://imaging-stg.intouchstaging.com/studies?utf8=%E2%9C%93&search%5Bgeolocation%5D=4513&search%5Bpatient_first_name%5D=juan&search%5Bpatient_last_name%5D=&search%5Bpatient_dob%5D=&search%5Bpatient_id%5D=&search%5Bfrom_date%5D=&search%5Bto_date%5D=&commit=Search
+    IDP Login    ${superUsername}    ${superPassword}
+    Location Should Contain    &search%5Bgeolocation%5D=4513&search%5Bpatient_first_name%5D=juan&search%5Bpatient_last_name%5D=&search%5Bpatient_dob%5D=&search%5Bpatient_id%5D=&search%5Bfrom_date%5D=&search%5Bto_date%5D=&commit=Search
+    Logout from IMG
+    Go To    ${SmartNotesURL}
+    IDP Login    ${superUsername}    ${superPassword}
+    Go To    https://imaging-stg.intouchstaging.com/studies?utf8=%E2%9C%93&search%5Bgeolocation%5D=4513&search%5Bpatient_first_name%5D=juan&search%5Bpatient_last_name%5D=&search%5Bpatient_dob%5D=&search%5Bpatient_id%5D=&search%5Bfrom_date%5D=&search%5Bto_date%5D=&commit=Search
+    Location should contain    &search%5Bgeolocation%5D=4513&search%5Bpatient_first_name%5D=juan&search%5Bpatient_last_name%5D=&search%5Bpatient_dob%5D=&search%5Bpatient_id%5D=&search%5Bfrom_date%5D=&search%5Bto_date%5D=&commit=Search
+    Reset Browser
+    Close Browser
+
+Do not autofill Study search fields
+    Open chrome and Maximize    ${ImagingURL}
+    IDP Login    ${superUsername}    ${superPassword}
+    Location Should Be    ${ImagingURL}
+    Element Attribute Should Contain    css=form@autocomplete    off
+    close browser
+
+As a user I should be able to view a list of studies with a link to those studies
+    Open chrome and Maximize    ${ImagingURL}
+    IDP Login    ${superUsername}    ${superPassword}
+    Location Should Be    https://imaging-stg.intouchstaging.com/studies
+    Query Juan
+    Click Juan Study
+    Select Window    title=InTouch Imaging
+    Location Should Contain    https://pvstaging404.pacsviewer.net
+    Wait Until Page Contains Element    id=mdiStage    100000
+    Select Window
+    Select From List by Value    id=search_geolocation    4516
+    Query Juan
+    Click Juan Study
+    Select Window    title=InTouch PACS Viewer
+    Location Should Contain    https://t2.pacsviewer.net
+    Wait Until Page Contains Element    id=imageviewer    100000
+    Select Window
+    Close Browser
+
+Timeframe is used for all queries and requeries
+    Open chrome and Maximize    ${ImagingURL}
+    IDP Login    ${superUsername}    ${superPassword}
+    Input First Name    ${juanFirstName}
+    Input Last Name    ${juanLastName}
+    Input DOB Date    ${datePickerDOB Locator}    @{juanDobList}
+    Input MRN    ${juanMRN}
+    Input Study Date    ${datePickerFrom Locator}    @{studyDate}
+    Input Study Date    ${datePickerTo Locator}    @{studyDate}
+    Click Search
+    Wait Until Element Contains    ${resultsTable Locator}    ${juanMRN}
+    Input Study Date    ${datePickerFrom Locator}    @{noStudyDate}
+    Input Study Date    ${datePickerTo Locator}    @{noStudyDate}
+    Click Search
+    Element Should Contain    ${resultsPanel Locator}    ${noSearchResults}
+    Close Browser
+
+Date inputs should not allow typing. They should only allow use of the datepicker.
+    Open chrome and Maximize    ${ImagingURL}
+    IDP Login    ${superUsername}    ${superPassword}
+    Element Attribute Should Contain    ${datePickerDOB Locator}${readonlyAttribute Locator}    true
+    Element Attribute Should Contain    ${datePickerFrom Locator}${readonlyAttribute Locator}    true
+    Element Attribute Should Contain    ${datePickerTo Locator}${readonlyAttribute Locator}    true
+    Input DOB Date    ${datePickerDOB Locator}    @{studyDate}
+    Input Study Date    ${datePickerFrom Locator}    @{studyDate}
+    Input Study Date    ${datePickerTo Locator}    @{studyDate}
+    Textfield Value Should Be    ${datePickerDOB Locator}    ${juanStudyDate}
+    Textfield Value Should Be    ${datePickerFrom Locator}    ${juanStudyDate}
+    Textfield Value Should Be    ${datePickerTo Locator}    ${juanStudyDate}
+    Close Browser
+
+The patient DOB input should start with the 'decades' view
+    Open chrome and Maximize    ${ImagingURL}
+    IDP Login    ${superUsername}    ${superPassword}
+    Click Element    ${datePickerDOB Locator}
+    Element Should Be Visible    xpath=//div[@class="datepicker-decades"]
+    Close Browser
+
+The datepicker should include a 'clear' button
+    Open chrome and Maximize    ${ImagingURL}
+    IDP Login    ${superUsername}    ${superPassword}
+    Input DOB Date    ${datePickerDOB Locator}    @{studyDate}
+    Input Study Date    ${datePickerFrom Locator}    @{studyDate}
+    Input Study Date    ${datePickerTo Locator}    @{studyDate}
+    Clear DOB    ${datePickerDOB Locator}
+    Clear Study Date    ${datePickerFrom Locator}
+    Clear Study Date    ${datePickerTo Locator}
+    Textfield Value Should Be    ${datePickerDOB Locator}    ${EMPTY}
+    Textfield Value Should Be    ${datePickerFrom Locator}    ${EMPTY}
+    Textfield Value Should Be    ${datePickerTo Locator}    ${EMPTY}
+    Close Browser

@@ -1,0 +1,4 @@
+*** Variables ***
+${usernameInput Locator}    id=Username
+${passwordInput Locator}    id=Password
+${signInButton Locator}    name=button

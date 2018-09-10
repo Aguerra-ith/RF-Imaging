@@ -1,0 +1,18 @@
+*** Settings ***
+Library           ExtendedSelenium2Library
+Resource          ../ElementLocators/idpPageElements.txt
+Resource          ../DataFiles/TestData1.txt
+Resource          ../ElementLocators/imgPageElements.txt
+
+*** Keywords ***
+IDP Login
+    [Arguments]    ${Username}    ${Password}
+    Location should contain    ${idpBasePath}
+    Input Text    ${usernameInput Locator}    ${Username}
+    Input Password    ${passwordInput Locator}    ${Password}
+    Click Button    ${signInButton Locator}
+
+Open chrome and Maximize
+    [Arguments]    ${url}
+    Open Browser    ${url}    chrome
+    Maximize Browser Window

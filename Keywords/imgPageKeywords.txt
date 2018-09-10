@@ -1,0 +1,79 @@
+*** Settings ***
+Library           ExtendedSelenium2Library
+Resource          ../DataFiles/TestData1.txt
+Resource          ../ElementLocators/imgPageElements.txt
+
+*** Keywords ***
+Query Juan
+    Input Text    ${patientFirstNameInput Locator}    ${juanFirstName}
+    Click Button    ${clearButton Locator}
+    Click Search
+    Table Should Contain    ${resultsTable Locator}    ${juanLastName}
+
+Reset Browser
+    Go To    ${ImagingURL}
+
+Logout from IMG
+    Click Button    ${imgLogoutButton Locator}
+    Location should contain    ${idpBasePath}
+
+Click Juan Study
+    Click Element    ${juanStudyResult Locator}
+
+Input From Date (script)
+    [Arguments]    ${date}
+    Execute Javascript    document.getElementById("datepicker-from").readOnly = false;
+    Input Text    ${datePickerFrom Locator}    ${date}
+
+Input To Date (script)
+    [Arguments]    ${date}
+    Execute Javascript    document.getElementById("datepicker-to").readOnly = false;
+    Input Text    ${datePickerTo Locator}    ${date}
+
+Click Search
+    Click Button    ${searchButton Locator}
+
+Input Study Date
+    [Arguments]    ${datePicker}    @{date}
+    Click Element    ${datePicker}
+    Click Element    xpath=//div[@class="datepicker-days"]//th[@class="datepicker-switch"]
+    Click Element    xpath=//div[@class="datepicker-months"]//th[@class="datepicker-switch"]
+    Click Element    xpath=//div[@class="datepicker-years"]//th[@class="datepicker-switch"]
+    Click Element    xpath=//div[@class="datepicker-decades"]//th[@class="datepicker-switch"]
+    Click Element    xpath=//div[@class="datepicker-centuries"]//span[contains(text(),${date[0]})]
+    Click Element    xpath=//div[@class="datepicker-decades"]//span[contains(text(), ${date[1]})]
+    Click Element    xpath=//div[@class="datepicker-years"]//span[contains(text(), ${date[2]})]
+    Click Element    xpath=//div[@class="datepicker-months"]//span[contains(text(), ${date[3]})]
+    Click Element    xpath=//div[@class="datepicker-days"]//td[contains(text(), ${date[4]}) and @class="day"]|//td[contains(text(), ${date[4]}) and @class="active day"]
+
+Input DOB Date
+    [Arguments]    ${datePicker}    @{date}
+    Click Element    ${datePicker}
+    Click Element    xpath=//div[@class="datepicker-decades"]//th[@class="datepicker-switch"]
+    Click Element    xpath=//div[@class="datepicker-centuries"]//span[contains(text(),${date[0]})]
+    Click Element    xpath=//div[@class="datepicker-decades"]//span[contains(text(), ${date[1]})]
+    Click Element    xpath=//div[@class="datepicker-years"]//span[contains(text(), ${date[2]})]
+    Click Element    xpath=//div[@class="datepicker-months"]//span[contains(text(), ${date[3]})]
+    Click Element    xpath=//div[@class="datepicker-days"]//td[contains(text(), ${date[4]}) and @class="day"]|//td[contains(text(), ${date[4]}) and @class="active day"]
+
+Clear DOB
+    [Arguments]    ${datePicker}
+    Click Element    ${datePicker}
+    Click Element    xpath=//div[@class="datepicker-decades"]//th[@class="clear"]
+
+Clear Study Date
+    [Arguments]    ${datePicker}
+    Click Element    ${datePicker}
+    Click Element    xpath=//div[@class="datepicker-days"]//th[@class="clear"]
+
+Input First Name
+    [Arguments]    ${name}
+    Input Text    ${patientFirstNameInput Locator}    ${name}
+
+Input Last Name
+    [Arguments]    ${name}
+    Input Text    ${patientLastNameInput Locator}    ${name}
+
+Input MRN
+    [Arguments]    ${mrn}
+    Input Text    ${patientMRNInput Locator}    ${mrn}
