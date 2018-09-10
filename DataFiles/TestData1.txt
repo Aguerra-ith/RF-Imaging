@@ -1,7 +1,7 @@
 *** Variables ***
 ${superUsername}    aguerra
 ${superPassword}    Welcome1!
-${ImagingURL}     https://imaging-stg.intouchstaging.com
+${ImagingURL}     https://imaging-stg.intouchstaging.com/studies
 ${idpBasePath}    https://idprovider.intouchstaging.com
 ${SmartNotesURL}    https://notes-stg.intouchstaging.com
 ${juanFirstName}    Juan
